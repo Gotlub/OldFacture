@@ -2,95 +2,58 @@
 
 namespace App\Entity;
 
+use App\Repository\FactureRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Facture
- *
- * @ORM\Table(name="facture")
- * @ORM\Entity
- */
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: FactureRepository::class)]
 class Facture
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=500, nullable=false)
-     */
-    private $description;
+    #[Assert\NotNull()]
+    #[ORM\Column(length: 500)]
+    private ?string $description = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="identifiant_PES", type="string", length=100, nullable=false)
-     */
-    private $identifiantPes;
+    #[Assert\NotNull()]
+    #[ORM\Column(name : "identifiant_PES", length: 100)]
+    private ?string $identifiantPes = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=100, nullable=false)
-     */
-    private $nom;
+    #[Assert\NotNull()]
+    #[ORM\Column(length: 100)]
+    private ?string $nom = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="code_entite", type="text", length=65535, nullable=false)
-     */
-    private $codeEntite;
+    #[Assert\NotNull()]
+    #[ORM\Column(name: "code_entite", length: 65535)]
+    private ?string $codeEntite = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="libelle_entite", type="text", length=65535, nullable=false)
-     */
-    private $libelleEntite;
+    #[Assert\NotNull()]
+    #[ORM\Column(name: "libelle_entite", length: 65535)]
+    private ?string $libelleEntite = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="element_rattache", type="text", length=65535, nullable=false)
-     */
-    private $elementRattache;
+    #[Assert\NotNull()]
+    #[ORM\Column(name: "element_rattache", length: 65535)]
+    private ?string $elementRattache = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="exercice", type="integer", nullable=false)
-     */
-    private $exercice;
+    #[Assert\NotNull()]
+    #[ORM\Column()]
+    private ?int $exercice = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero", type="integer", nullable=false)
-     */
-    private $numero;
+    #[Assert\NotNull()]
+    #[ORM\Column()]
+    private ?int $numero = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="objet", type="string", length=500, nullable=false)
-     */
-    private $objet;
+    #[Assert\NotNull()]
+    #[ORM\Column(length: 500)]
+    private ?string $objet = null;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="dossierpj", type="integer", nullable=true, options={"default"="NULL"})
-     */
-    private $dossierpj = NULL;
+    #[ORM\Column()]
+    private ?int $dossierpj = null;
 
     public function getId(): ?int
     {
@@ -216,6 +179,4 @@ class Facture
 
         return $this;
     }
-
-
 }

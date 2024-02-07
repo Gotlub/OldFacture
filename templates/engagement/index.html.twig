@@ -39,7 +39,6 @@
                                 <input type="number" class="input-group input-group-lg" name="Exercice" min = "1996"
                                     value="{% if annee|default and annee != "**" %}{{ annee }}{% endif %}">
                             </div>
-                        
                         </th>
                         <th  class="text-left align-top" scope="col">SensEtNumero</th>
                         <th  class="text-left align-top" scope="col">Objet
@@ -81,7 +80,6 @@
                 </tbody>
             </table>
 
-            <a href="{{ path('app_engagement_new') }}">Create new</a>
             {# display navigation #}
             <div class="navigation d-flex justify-content-center mt-4">
                 {{ knp_pagination_render(pagination) }}

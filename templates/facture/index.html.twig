@@ -3,50 +3,89 @@
 {% block title %}Facture index{% endblock %}
 
 {% block body %}
-    <h1>Facture index</h1>
-    <a href="{{ path('app_facture_new') }}">Rechercher</a>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Description</th>
-                <th>IdentifiantPes</th>
-                <th>Nom</th>
-                <th>CodeEntite</th>
-                <th>LibelleEntite</th>
-                <th>ElementRattache</th>
-                <th>Exercice</th>
-                <th>Numero</th>
-                <th>Objet</th>
-                <th>Dossierpj</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for facture in factures %}
-            <tr>
-                <td><a href="{{ path('app_facture_show', { 'id': facture.id }) }}">{{ facture.id }}</a></td>
-                <td>{{ facture.description }}</td>
-                <td>{{ facture.identifiantPes }}</td>
-                <td>{{ facture.nom }}</td>
-                <td>{{ facture.codeEntite }}</td>
-                <td>{{ facture.libelleEntite }}</td>
-                <td>{{ facture.elementRattache }}</td>
-                <td>{{ facture.exercice }}</td>
-                <td>{{ facture.numero }}</td>
-                <td>{{ facture.objet }}</td>
-                <td>{{ facture.dossierpj ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_facture_edit', {'id': facture.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="12">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    
+    {% if descrip|default(null) %}{% endif %}
+    {% if code|default(null) %}{% endif %}
+    {% if libelle|default(null) %}{% endif %}
+    {% if annee|default(null) %}{% endif %}
+    {% if obj|default(null) %}{% endif %}
+    <div class="container-fluid">
+        <div class="row">
+            <h1>Facture index</h1>
+            <table style="width: 100;" class="table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <form class="form-inline mt-1" method="POST" action="{{ path('app_facture.findallcontain') }}">
+                            <th class="text-left align-top" scope="col">Id</th>
+                            <th class="text-left align-top" scope="col">Description
+                            </br>
+                                <div class="form-group mr-1 mb-2">
+                                    <input type="text" class="input-group input-group-lg" name="Description" 
+                                        value="{% if descrip|default and descrip != "**" %}{{ descrip }}{% endif %}">
+                                </div>
+                            </th>
+                            <th class="text-left align-top" scope="col">IdentifiantPes</th>
+                            <th class="text-left align-top" scope="col">CodeEntite
+                            </br>
+                                <div class="form-group mr-1 mb-2">
+                                    <input type="text" class="input-group input-group-lg" name="CodeEntite" 
+                                        value="{% if code|default and code != "**" %}{{ code }}{% endif %}">
+                                </div>
+                            </th>
+                            <th class="text-left align-top" scope="col">LibelleEntite
+                            </br>
+                                <div class="form-group mr-1 mb-2">
+                                    <input type="text" class="input-group input-group-lg" name="LibelleEntite" 
+                                        value="{% if libelle|default and libelle != "**" %}{{ libelle }}{% endif %}">
+                                </div>
+                            </th>
+                            <th class="text-left align-top" scope="col">Exercice
+                            </br>
+                                <div class="form-group mr-1 mb-2">
+                                    <input type="number" class="input-group input-group-lg" name="Exercice" min = "1996"
+                                        value="{% if annee|default and annee != "**" %}{{ annee }}{% endif %}">
+                                </div>
+                            </th>
+                            <th class="text-left align-top" scope="col">Numero</th>
+                            <th class="text-left align-top" scope="col">Objet
+                            </br>
+                                <div class="form-group mr-1 mb-2">
+                                    <input type="text" class="input-group input-group-lg" name="Objet" 
+                                        value="{% if obj|default and obj != "**" %}{{ obj }}{% endif %}">
+                                </div>
+                            </th>
+                            <th class="text-left align-top" scope="col">Dossierpj
+                                </br>
+                                <div class="form-group mr-1 mb-2">
+                                    <button type="submit" class="btn btn-info mb-2 btn-sm">filtrer</button>
+                                </div>
+                            </th>
+                        </form>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for facture in pagination %}
+                    <tr>
+                        <td><a href="{{ path('app_facture.show', { 'id': facture.id }) }}" class="link-dark">{{ facture.id }}</a></td>
+                        <td><a href="{{ path('app_facture.show', { 'id': facture.id }) }}" class="link-dark">{{ facture.description }}</a></td>
+                        <td><a href="{{ path('app_facture.show', { 'id': facture.id }) }}" class="link-dark">{{ facture.identifiantPes }}</a></td>
+                        <td>{{ facture.codeEntite }}</td>
+                        <td>{{ facture.libelleEntite }}</td>
+                        <td>{{ facture.exercice }}</td>
+                        <td>{{ facture.numero }}</td>
+                        <td>{{ facture.objet }}</td>
+                        <td>{{ facture.dossierpj }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="12">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {# display navigation #}
+            <div class="navigation d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

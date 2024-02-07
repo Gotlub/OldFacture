@@ -20,7 +20,6 @@ class EngagementController extends AbstractController
             $engagementRepository->paginationQuery(),
             $request->query->get('page', 1),
             20
-
         );
         return $this->render('engagement/index.html.twig', [
             'pagination' => $pagination,
@@ -29,8 +28,7 @@ class EngagementController extends AbstractController
 
 
     #[Route('/engagements/', name: 'app_engagement.findallcontain', methods: ['post'])]
-    public function findAllContain(EngagementRepository $engagementRepository,
-    Request $request, PaginatorInterface $paginator): Response{
+    public function findAllContain(Request $request): Response{
         $descrip = $request->get("Description");
         $descrip = ($descrip == "") ? "**" : $descrip;
         $annee = $request->get("Exercice");
@@ -82,7 +80,7 @@ class EngagementController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_engagement.show', methods: ['GET'])]
+    #[Route('/app_engagement/{id}', name: 'app_engagement.show', methods: ['GET'])]
     public function show(Engagement $engagement): Response
     {
         return $this->render('engagement/show.html.twig', [
