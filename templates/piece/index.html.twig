@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Piece index{% endblock %}
+
+{% block body %}
+    <h1>Piece index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>IdentifiantPes</th>
+                <th>Nom</th>
+                <th>CodeEntite</th>
+                <th>LibelleEntite</th>
+                <th>ElementRattache</th>
+                <th>Exercice</th>
+                <th>Sens</th>
+                <th>AnnulationRejet</th>
+                <th>BordereauPiece</th>
+                <th>Objet</th>
+                <th>Dossierpj</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for piece in pieces %}
+            <tr>
+                <td>{{ piece.id }}</td>
+                <td>{{ piece.description }}</td>
+                <td>{{ piece.identifiantPes }}</td>
+                <td>{{ piece.nom }}</td>
+                <td>{{ piece.codeEntite }}</td>
+                <td>{{ piece.libelleEntite }}</td>
+                <td>{{ piece.elementRattache }}</td>
+                <td>{{ piece.exercice }}</td>
+                <td>{{ piece.sens }}</td>
+                <td>{{ piece.annulationRejet }}</td>
+                <td>{{ piece.bordereauPiece }}</td>
+                <td>{{ piece.objet }}</td>
+                <td>{{ piece.dossierpj }}</td>
+                <td>
+                    <a href="{{ path('app_piece_show', {'id': piece.id}) }}">show</a>
+                    <a href="{{ path('app_piece_edit', {'id': piece.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="14">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_piece_new') }}">Create new</a>
+{% endblock %}

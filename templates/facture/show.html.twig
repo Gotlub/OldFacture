@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Facture{% endblock %}
+
+{% block body %}
+    <h1>Facture</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ facture.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ facture.description }}</td>
+            </tr>
+            <tr>
+                <th>IdentifiantPes</th>
+                <td>{{ facture.identifiantPes }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ facture.nom }}</td>
+            </tr>
+            <tr>
+                <th>CodeEntite</th>
+                <td>{{ facture.codeEntite }}</td>
+            </tr>
+            <tr>
+                <th>LibelleEntite</th>
+                <td>{{ facture.libelleEntite }}</td>
+            </tr>
+            <tr>
+                <th>ElementRattache</th>
+                <td>{{ facture.elementRattache }}</td>
+            </tr>
+            <tr>
+                <th>Exercice</th>
+                <td>{{ facture.exercice }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ facture.numero }}</td>
+            </tr>
+            <tr>
+                <th>Objet</th>
+                <td>{{ facture.objet }}</td>
+            </tr>
+            <tr>
+                <th>Dossierpj</th>
+                <td>{{ facture.dossierpj }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_facture_index') }}">back to list</a>
+
+    <a href="{{ path('app_facture_edit', {'id': facture.id}) }}">edit</a>
+
+    {{ include('facture/_delete_form.html.twig') }}
+{% endblock %}

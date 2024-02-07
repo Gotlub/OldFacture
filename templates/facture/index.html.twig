@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Facture index{% endblock %}
+
+{% block body %}
+    <h1>Facture index</h1>
+    <a href="{{ path('app_facture_new') }}">Rechercher</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>IdentifiantPes</th>
+                <th>Nom</th>
+                <th>CodeEntite</th>
+                <th>LibelleEntite</th>
+                <th>ElementRattache</th>
+                <th>Exercice</th>
+                <th>Numero</th>
+                <th>Objet</th>
+                <th>Dossierpj</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for facture in factures %}
+            <tr>
+                <td><a href="{{ path('app_facture_show', { 'id': facture.id }) }}">{{ facture.id }}</a></td>
+                <td>{{ facture.description }}</td>
+                <td>{{ facture.identifiantPes }}</td>
+                <td>{{ facture.nom }}</td>
+                <td>{{ facture.codeEntite }}</td>
+                <td>{{ facture.libelleEntite }}</td>
+                <td>{{ facture.elementRattache }}</td>
+                <td>{{ facture.exercice }}</td>
+                <td>{{ facture.numero }}</td>
+                <td>{{ facture.objet }}</td>
+                <td>{{ facture.dossierpj ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_facture_edit', {'id': facture.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}
