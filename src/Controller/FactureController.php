@@ -41,6 +41,8 @@ class FactureController extends AbstractController
         $libelle = ($libelle == "") ? "**" : $libelle;
         $ident = $request->get("IdentifiantPes");
         $ident = ($ident == "") ? "**" : $ident;
+        $numero = $request->get("Numero");
+        $numero = ($numero == "") ? "**" : $numero;
 
         return $this->redirectToRoute('app_facture.findallcontainReq', [
             'annee' => $annee,
@@ -48,14 +50,15 @@ class FactureController extends AbstractController
             'ident' => $ident,
             'code' => $code,
             'obj' => $obj,
-            'libelle' => $libelle
+            'libelle' => $libelle,
+            'numero' => $numero
         ]);
     }
 
-    #[Route('/factures/{annee}/{descrip}/{code}/{obj}/{libelle}/{ident}', name: 'app_facture.findallcontainReq', methods: ['post', 'get'])]
+    #[Route('/factures/{annee}/{descrip}/{code}/{obj}/{libelle}/{ident}/{numero}', name: 'app_facture.findallcontainReq', methods: ['post', 'get'])]
     public function findAllContainReq(FactureRepository $factureRepository,
     PaginatorInterface $paginator, Request $request,
-    $descrip ="", $annee = "", $code = "", $obj= "", $libelle = "", $ident = ""): Response{
+    $descrip ="", $annee = "", $code = "", $obj= "", $libelle = "", $ident = "", $numero = ""): Response{
         $params = array();
         if($annee != "**" && is_numeric($annee)){
             $params += array("exercice" => (int)$annee);
@@ -74,6 +77,9 @@ class FactureController extends AbstractController
         }
         if($ident != "**"){
             $params += array("identifiant_PES" => $ident);
+        }
+        if($numero != "**"){
+            $params += array("numero" => $numero);
         }
         if(count($params) == 0) {
             return $this->redirectToRoute('app_facture.index');

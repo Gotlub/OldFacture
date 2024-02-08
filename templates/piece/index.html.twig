@@ -8,6 +8,7 @@
     {% if code|default(null) %}{% endif %}
     {% if libelle|default(null) %}{% endif %}
     {% if annee|default(null) %}{% endif %}
+    {% if annul|default(null) %}{% endif %}
     {% if bordereau|default(null) %}{% endif %}
     {% if obj|default(null) %}{% endif %}
     {% if sens|default(null) %}{% endif %}
@@ -53,7 +54,13 @@
                                         value="{% if annee|default and annee != "**" %}{{ annee }}{% endif %}">
                                 </div>
                             </th>
-                            <th class="text-left align-top" scope="col">AnnulationRejet</th>
+                            <th class="text-left align-top" scope="col">AnnulationRejet
+                            </br>
+                                <div class="form-group mr-1 mb-2">
+                                    <input type="text" class="input-group input-group-lg" name="AnnulationRejet"
+                                        value="{% if annul|default and annul != "**" %}{{ annul }}{% endif %}">
+                                </div>
+                            </th>
                             <th class="text-left align-top" scope="col">BordereauPiece
                             </br>
                                 <div class="form-group mr-1 mb-2">

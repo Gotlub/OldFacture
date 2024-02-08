@@ -47,6 +47,8 @@ class PieceController extends AbstractController
         $bordereau = ($bordereau == "") ? "**" : $bordereau;
         $sens = $request->get("Sens");
         $sens = ($sens == "") ? "**" : $sens;
+        $annul = $request->get("AnnulationRejet");
+        $annul = ($annul == "") ? "**" : $annul;
 
         return $this->redirectToRoute('app_piece.findallcontainReq', [
             'annee' => $annee,
@@ -56,15 +58,16 @@ class PieceController extends AbstractController
             'libelle' => $libelle,
             'ident' => $ident,
             'bordereau' => $bordereau,
-            'sens' => $sens
+            'sens' => $sens,
+            'annul' => $annul
         ]);
     }
 
-    #[Route('/pieces/{annee}/{descrip}/{code}/{obj}/{libelle}/{ident}/{bordereau}/{sens}', name: 'app_piece.findallcontainReq', methods: ['post', 'get'])]
+    #[Route('/pieces/{annee}/{descrip}/{code}/{obj}/{libelle}/{ident}/{bordereau}/{sens}/{annul}', name: 'app_piece.findallcontainReq', methods: ['post', 'get'])]
     public function findAllContainReq(PieceRepository $pieceRepository,
     PaginatorInterface $paginator, Request $request,
     $descrip ="", $annee = "", $code = "", $obj= "", $libelle = "",
-    $ident = "", $bordereau= "", $sens = ""): Response{
+    $ident = "", $bordereau= "", $sens = "", $annul = ""): Response{
         $params = array();
         if($annee != "**" && is_numeric($annee)){
             $params += array("exercice" => (int)$annee);
@@ -90,6 +93,9 @@ class PieceController extends AbstractController
         if($sens != "**"){
             $params += array("sens" => $sens);
         }
+        if($annul != "**"){
+            $params += array("annulation_rejet" => $annul);
+        }
         if(count($params) == 0) {
             return $this->redirectToRoute('app_piece.index');
         }
@@ -107,7 +113,8 @@ class PieceController extends AbstractController
             'libelle' => $libelle,
             'ident' => $ident,
             'bordereau' => $bordereau,
-            'sens' => $sens
+            'sens' => $sens,
+            'annul' => $annul
         ]);
     }
 

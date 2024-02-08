@@ -8,6 +8,7 @@
     {% if code|default(null) %}{% endif %}
     {% if libelle|default(null) %}{% endif %}
     {% if annee|default(null) %}{% endif %}
+    {% if numero|default(null) %}{% endif %}
     {% if obj|default(null) %}{% endif %}
     <div class="container-fluid">
         <div class="row">
@@ -51,7 +52,13 @@
                                         value="{% if annee|default and annee != "**" %}{{ annee }}{% endif %}">
                                 </div>
                             </th>
-                            <th class="text-left align-top" scope="col">Numero</th>
+                            <th class="text-left align-top" scope="col">Numero
+                            </br>
+                                <div class="form-group mr-1 mb-2">
+                                    <input type="number" class="input-group input-group-lg" name="Numero"
+                                        value="{% if numero|default and numero != "**" %}{{ numero }}{% endif %}">
+                                </div>
+                            </th>
                             <th class="text-left align-top" scope="col">Objet
                             </br>
                                 <div class="form-group mr-1 mb-2">
