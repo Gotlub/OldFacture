@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Piece;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Piece>
@@ -37,6 +38,28 @@ class PieceRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function paginationQuery()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.identifiantPes', 'ASC')
+            ->getQuery()
+        ;
+    }
+
+    public function paginationQueryComplex(array $params) 
+    {
+        $sql = "SELECT p.* from piece p where";
+        foreach ($params as $key => $value){
+            $sql .= " $key LIKE  '%$value%' and";
+        }
+        $sql = substr($sql, 0, strlen($sql)-3);
+        $sql .=" order by p.identifiant_PES";
+        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
+        $rsm->addRootEntityFromClassMetadata('App\Entity\Piece', 'p');
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        return $query;
     }
 
 //    /**

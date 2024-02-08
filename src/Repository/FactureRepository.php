@@ -6,7 +6,6 @@ use App\Entity\Facture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
-use PhpParser\Node\Expr\Cast\Array_;
 
 /**
  * @extends ServiceEntityRepository<Prestataire>
@@ -44,7 +43,7 @@ class FactureRepository extends ServiceEntityRepository
     public function paginationQuery()
     {
         return $this->createQueryBuilder('f')
-            ->orderBy('f.id', 'ASC')
+            ->orderBy('f.identifiantPes', 'ASC')
             ->getQuery()
         ;
     }
@@ -56,6 +55,7 @@ class FactureRepository extends ServiceEntityRepository
             $sql .= " $key LIKE  '%$value%' and";
         }
         $sql = substr($sql, 0, strlen($sql)-3);
+        $sql .=" order by F.identifiant_PES";
         $rsm = new ResultSetMappingBuilder($this->getEntityManager());
         $rsm->addRootEntityFromClassMetadata('App\Entity\Facture', 'f');
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);

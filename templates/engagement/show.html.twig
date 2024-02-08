@@ -51,6 +51,10 @@
                 <th>Dossierpj</th>
                 <td>{{ engagement.dossierpj }}</td>
             </tr>
+            <tr>
+                <th>PDF</th>
+                <td><a href="{{ path('app_engagement.dl', { 'id': engagement.id }) }}">{{ engagement.fichierpj }}</a></td>
+            </tr>
         </tbody>
     </table>
 

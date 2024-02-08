@@ -7,6 +7,9 @@
     {% if code|default(null) %}{% endif %}
     {% if annee|default(null) %}{% endif %}
     {% if obj|default(null) %}{% endif %}
+    {% if ident|default(null) %}{% endif %}
+    {% if libelle|default(null) %}{% endif %}
+    {% if sens|default(null) %}{% endif %}
     <div class="container-fluid">
         <div class="row">
             <h1>Engagement index</h1>
@@ -14,7 +17,6 @@
                 <thead>
                     <tr>
                         <form class="form-inline mt-1" method="POST" action="{{ path('app_engagement.findallcontain') }}">
-                        <th class="text-left align-top" scope="col">Id</th>
                         <th class="text-left align-top" scope="col">Description
                         </br>
                             <div class="form-group mr-1 mb-2">
@@ -23,6 +25,11 @@
                             </div>
                         </th>
                         <th  class="text-left align-top" scope="col">IdentifiantPes
+                        </br>
+                            <div class="form-group mr-1 mb-2">
+                                <input type="text" class="input-group input-group-lg" name="IdentifiantPes" 
+                                    value="{% if ident|default and ident != "**" %}{{ ident }}{% endif %}">
+                            </div>
                         </th>
                         <th  class="text-left align-top" scope="col">CodeEntite
                         </br>
@@ -31,16 +38,27 @@
                                     value="{% if code|default and code != "**" %}{{ code }}{% endif %}">
                             </div>
                         </th>
-                        <th class="text-left align-top" scope="col">LibelleEntite</th>
-                        <th class="text-left align-top" scope="col">ElementRattache</th>
+                        <th class="text-left align-top" scope="col">LibelleEntite
+                        </br>
+                            <div class="form-group mr-1 mb-2">
+                                <input type="text" class="input-group input-group-lg" name="LibelleEntite" 
+                                    value="{% if libelle|default and libelle != "**" %}{{ libelle }}{% endif %}">
+                            </div>
+                        </th>
                         <th class="text-left align-top" scope="col">Exercice
                         </br>
                             <div class="form-group mr-1 mb-2">
-                                <input type="number" class="input-group input-group-lg" name="Exercice" min = "1996"
+                                <input type="number" class="input-group input-group-lg" name="Exercice" min = "2015"
                                     value="{% if annee|default and annee != "**" %}{{ annee }}{% endif %}">
                             </div>
                         </th>
-                        <th  class="text-left align-top" scope="col">SensEtNumero</th>
+                        <th  class="text-left align-top" scope="col">SensEtNumero
+                        </br>
+                            <div class="form-group mr-1 mb-2">
+                                <input type="text" class="input-group input-group-lg" name="SensEtNumero" 
+                                    value="{% if sens|default and sens != "**" %}{{ sens }}{% endif %}">
+                            </div>
+                        </th>
                         <th  class="text-left align-top" scope="col">Objet
                         </br>
                             <div class="form-group mr-1 mb-2">
@@ -48,7 +66,7 @@
                                     value="{% if obj|default and obj != "**" %}{{ obj }}{% endif %}">
                             </div>
                         </th>
-                        <th class="text-left align-top" scope="col">Dossierpj
+                        <th class="text-left align-top" scope="col">
                             </br>
                             <div class="form-group mr-1 mb-2">
                                 <button type="submit" class="btn btn-info mb-2 btn-sm">filtrer</button>
@@ -60,16 +78,14 @@
                 <tbody>
                 {% for engagement in pagination %}
                     <tr>
-                        <td><a href={{ path('app_engagement.show', { id : engagement.id}) }} class="link-dark">{{ engagement.id }}</a></td>
                         <td><a href={{ path('app_engagement.show', { id : engagement.id}) }} class="link-dark">{{ engagement.description }}</a></td>
                         <td><a href={{ path('app_engagement.show', { id : engagement.id}) }} class="link-dark">{{ engagement.identifiantPes }}</a></td>
                         <td>{{ engagement.codeEntite }}</td>
                         <td>{{ engagement.libelleEntite }}</td>
-                        <td>{{ engagement.elementRattache }}</td>
                         <td>{{ engagement.exercice }}</td>
                         <td>{{ engagement.sensEtNumero }}</td>
                         <td>{{ engagement.objet }}</td>
-                        <td>{{ engagement.dossierpj }}</td>
+                        <td><a href="{{ path('app_engagement.dl', { 'id': engagement.id }) }}">PDF</a></td>
                         
                     </tr>
                 {% else %}

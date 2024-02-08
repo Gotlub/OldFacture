@@ -3,49 +3,115 @@
 namespace App\Controller;
 
 use App\Entity\Piece;
-use App\Form\Piece2Type;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\PieceRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/piece')]
+
 class PieceController extends AbstractController
 {
-    #[Route('/', name: 'app_piece.index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/pieces/index', name: 'app_piece.index', methods: ['GET'])]
+    public function index(PieceRepository $pieceRepository,
+    Request $request, PaginatorInterface $paginator): Response
     {
-        $pieces = $entityManager
-            ->getRepository(Piece::class)
-            ->findAll();
+        $pagination = $paginator->paginate(
+            $pieceRepository->paginationQuery(),
+            $request->query->get('page', 1),
+            20
+        );
 
         return $this->render('piece/index.html.twig', [
-            'pieces' => $pieces,
+            'pagination' => $pagination,
         ]);
     }
 
-    #[Route('/new', name: 'app_piece_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $piece = new Piece();
-        $form = $this->createForm(Piece2Type::class, $piece);
-        $form->handleRequest($request);
+    #[Route('/pieces/seek', name: 'app_piece.findallcontain', methods: ['post'])]
+    public function findAllContain(Request $request): Response{
+        $descrip = $request->get("Description");
+        $descrip = ($descrip == "") ? "**" : $descrip;
+        $ident = $request->get("IdentifiantPes");
+        $ident = ($ident == "") ? "**" : $ident;
+        $annee = $request->get("Exercice");
+        $annee = ($annee == "") ? "**" : $annee;
+        $code = $request->get("CodeEntite");
+        $code = ($code == "") ? "**" : $code;
+        $obj = $request->get("Objet");
+        $obj = ($obj == "") ? "**" : $obj;
+        $libelle = $request->get("LibelleEntite");
+        $libelle = ($libelle == "") ? "**" : $libelle;
+        $bordereau = $request->get("BordereauPiece");
+        $bordereau = ($bordereau == "") ? "**" : $bordereau;
+        $sens = $request->get("Sens");
+        $sens = ($sens == "") ? "**" : $sens;
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($piece);
-            $entityManager->flush();
+        return $this->redirectToRoute('app_piece.findallcontainReq', [
+            'annee' => $annee,
+            'descrip' => $descrip,
+            'code' => $code,
+            'obj' => $obj,
+            'libelle' => $libelle,
+            'ident' => $ident,
+            'bordereau' => $bordereau,
+            'sens' => $sens
+        ]);
+    }
 
-            return $this->redirectToRoute('app_piece_index', [], Response::HTTP_SEE_OTHER);
+    #[Route('/pieces/{annee}/{descrip}/{code}/{obj}/{libelle}/{ident}/{bordereau}/{sens}', name: 'app_piece.findallcontainReq', methods: ['post', 'get'])]
+    public function findAllContainReq(PieceRepository $pieceRepository,
+    PaginatorInterface $paginator, Request $request,
+    $descrip ="", $annee = "", $code = "", $obj= "", $libelle = "",
+    $ident = "", $bordereau= "", $sens = ""): Response{
+        $params = array();
+        if($annee != "**" && is_numeric($annee)){
+            $params += array("exercice" => (int)$annee);
         }
-
-        return $this->renderForm('piece/new.html.twig', [
-            'piece' => $piece,
-            'form' => $form,
+        if($descrip != "**"){
+            $params += array("description" => $descrip);
+        }
+        if($code != "**"){
+            $params += array("code_entite" => $code);
+        }
+        if($obj != "**"){
+            $params += array("objet" => $obj);
+        }
+        if($libelle != "**"){
+            $params += array("libelle_entite" => $libelle);
+        }
+        if($ident != "**"){
+            $params += array("identifiant_PES" => $ident);
+        }
+        if($bordereau != "**"){
+            $params += array("bordereau_piece" => $bordereau);
+        }
+        if($sens != "**"){
+            $params += array("sens" => $sens);
+        }
+        if(count($params) == 0) {
+            return $this->redirectToRoute('app_piece.index');
+        }
+        $pagination = $paginator->paginate(
+            $pieceRepository->paginationQueryComplex($params)->getResult(),
+            $request->query->get('page', 1),
+            20
+        );
+        return $this->render('piece/index.html.twig', [
+            'pagination' => $pagination,
+            'descrip' => $descrip,
+            'code' => $code,
+            'obj' => $obj,
+            'annee' => $annee,
+            'libelle' => $libelle,
+            'ident' => $ident,
+            'bordereau' => $bordereau,
+            'sens' => $sens
         ]);
     }
 
-    #[Route('/{id}', name: 'app_piece_show', methods: ['GET'])]
+    #[Route('/piece/{id}', name: 'app_piece.show', methods: ['GET'])]
     public function show(Piece $piece): Response
     {
         return $this->render('piece/show.html.twig', [
@@ -53,32 +119,12 @@ class PieceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_piece_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Piece $piece, EntityManagerInterface $entityManager): Response
+    #[Route('/piece/download/{id}', name: 'app_piece.dl', methods: ['GET', 'POST'])]
+    public function downloadAction(PieceRepository $pieceRepository, $id) : BinaryFileResponse
     {
-        $form = $this->createForm(Piece2Type::class, $piece);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_piece_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('piece/edit.html.twig', [
-            'piece' => $piece,
-            'form' => $form,
-        ]);
+        $piece = $pieceRepository->find($id);
+        return $this->file('C:/Users/nfrere/symfony/www/html/jvspj/public/'
+         .   $piece->getDossierpj() . '/' . $piece->getFichierpj());
     }
 
-    #[Route('/{id}', name: 'app_piece_delete', methods: ['POST'])]
-    public function delete(Request $request, Piece $piece, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$piece->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($piece);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_piece_index', [], Response::HTTP_SEE_OTHER);
-    }
 }

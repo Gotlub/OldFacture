@@ -43,11 +43,8 @@ class EngagementRepository extends ServiceEntityRepository
 
     public function paginationQuery()
     {
-        /*dd($this->createQueryBuilder('p')
-        ->orderBy('p.id', 'ASC')
-        ->getQuery());*/
-        return $this->createQueryBuilder('p')
-            ->orderBy('p.id', 'ASC')
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.identifiant_PES', 'ASC')
             ->getQuery()
         ;
     }
@@ -60,6 +57,7 @@ class EngagementRepository extends ServiceEntityRepository
         }
         // (enlève le dernier and)
         $sql = substr($sql, 0, strlen($sql)-3);
+        $sql .=" order by e.identifiant_PES";
         $rsm = new ResultSetMappingBuilder($this->getEntityManager());
         $rsm->addRootEntityFromClassMetadata('App\Entity\Engagement', 'e');
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);

@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\FactureRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -54,6 +53,10 @@ class Facture
 
     #[ORM\Column()]
     private ?int $dossierpj = null;
+
+    #[Assert\NotNull()]
+    #[ORM\Column(name : "fichierpj", length: 100)]
+    private ?string $fichierpj = null;
 
     public function getId(): ?int
     {
@@ -176,6 +179,30 @@ class Facture
     public function setDossierpj(?int $dossierpj): self
     {
         $this->dossierpj = $dossierpj;
+
+        return $this;
+    }
+
+     /**
+     * Get the value of fichierpj
+     *
+     * @return ?string
+     */
+    public function getFichierpj(): ?string
+    {
+        return $this->fichierpj;
+    }
+
+    /**
+     * Set the value of fichierpj
+     *
+     * @param ?string $fichierpj
+     *
+     * @return self
+     */
+    public function setFichierpj(?string $fichierpj): self
+    {
+        $this->fichierpj = $fichierpj;
 
         return $this;
     }

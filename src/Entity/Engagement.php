@@ -21,7 +21,7 @@ class Engagement
     private ?string $description = null;
 
     #[Assert\NotNull()]
-    #[ORM\Column(length: 500)]
+    #[ORM\Column(name: "identifiant_PES", length: 500)]
     private ?string $identifiant_PES = null;
 
     #[Assert\NotNull()]

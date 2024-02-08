@@ -51,6 +51,10 @@
                 <th>Dossierpj</th>
                 <td>{{ facture.dossierpj }}</td>
             </tr>
+            <tr>
+                <th>PDF</th>
+                <td><a href="{{ path('app_facture.dl', { 'id': facture.id }) }}">{{ facture.fichierpj }}</a></td>
+            </tr>
         </tbody>
     </table>
 

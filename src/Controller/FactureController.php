@@ -8,6 +8,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FactureController extends AbstractController
@@ -38,20 +39,23 @@ class FactureController extends AbstractController
         $obj = ($obj == "") ? "**" : $obj;
         $libelle = $request->get("LibelleEntite");
         $libelle = ($libelle == "") ? "**" : $libelle;
+        $ident = $request->get("IdentifiantPes");
+        $ident = ($ident == "") ? "**" : $ident;
 
         return $this->redirectToRoute('app_facture.findallcontainReq', [
             'annee' => $annee,
             'descrip' => $descrip,
+            'ident' => $ident,
             'code' => $code,
             'obj' => $obj,
             'libelle' => $libelle
         ]);
     }
 
-    #[Route('/factures/{annee}/{descrip}/{code}/{obj}/{libelle}', name: 'app_facture.findallcontainReq', methods: ['post', 'get'])]
+    #[Route('/factures/{annee}/{descrip}/{code}/{obj}/{libelle}/{ident}', name: 'app_facture.findallcontainReq', methods: ['post', 'get'])]
     public function findAllContainReq(FactureRepository $factureRepository,
     PaginatorInterface $paginator, Request $request,
-    $descrip ="", $annee = "", $code = "", $obj= "", $libelle = ""): Response{
+    $descrip ="", $annee = "", $code = "", $obj= "", $libelle = "", $ident = ""): Response{
         $params = array();
         if($annee != "**" && is_numeric($annee)){
             $params += array("exercice" => (int)$annee);
@@ -68,6 +72,9 @@ class FactureController extends AbstractController
         if($libelle != "**"){
             $params += array("libelle_entite" => $libelle);
         }
+        if($ident != "**"){
+            $params += array("identifiant_PES" => $ident);
+        }
         if(count($params) == 0) {
             return $this->redirectToRoute('app_facture.index');
         }
@@ -81,11 +88,11 @@ class FactureController extends AbstractController
             'descrip' => $descrip,
             'code' => $code,
             'obj' => $obj,
+            'ident' => $ident,
             'annee' => $annee,
             'libelle' => $libelle
         ]);
     }
-
 
     #[Route('/facture/{id}', name: 'app_facture.show', methods: ['GET'])]
     public function show(Facture $facture): Response
@@ -93,6 +100,14 @@ class FactureController extends AbstractController
         return $this->render('facture/show.html.twig', [
             'facture' => $facture,
         ]);
+    }
+
+    #[Route('/facture/download/{id}', name: 'app_facture.dl', methods: ['GET', 'POST'])]
+    public function downloadAction(FactureRepository $factureRepository, $id) : BinaryFileResponse
+    {
+        $facture = $factureRepository->find($id);
+        return $this->file('C:/Users/nfrere/symfony/www/html/jvspj/public/'
+         .   $facture->getDossierpj() . '/' . $facture->getFichierpj());
     }
 
 }

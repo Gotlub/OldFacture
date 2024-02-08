@@ -2,109 +2,69 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
+use App\Repository\PieceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Piece
- *
- * @ORM\Table(name="piece")
- * @ORM\Entity
- */
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: PieceRepository::class)]
 class Piece
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=500, nullable=false)
-     */
-    private $description;
+    #[Assert\NotNull()]
+    #[ORM\Column(length: 500)]
+    private ?string $description = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="identifiant_PES", type="string", length=100, nullable=false)
-     */
-    private $identifiantPes;
+    #[Assert\NotNull()]
+    #[ORM\Column(name : "identifiant_PES", length: 100)]
+    private ?string $identifiantPes = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=100, nullable=false)
-     */
-    private $nom;
+    #[Assert\NotNull()]
+    #[ORM\Column(length: 100)]
+    private ?string $nom = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="code_entite", type="text", length=65535, nullable=false)
-     */
-    private $codeEntite;
+    #[Assert\NotNull()]
+    #[ORM\Column(name: "code_entite", length: 65535)]
+    private ?string $codeEntite = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="libelle_entite", type="text", length=65535, nullable=false)
-     */
-    private $libelleEntite;
+    #[Assert\NotNull()]
+    #[ORM\Column(name: "libelle_entite", length: 65535)]
+    private ?string $libelleEntite = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="element_rattache", type="text", length=65535, nullable=false)
-     */
-    private $elementRattache;
+    #[Assert\NotNull()]
+    #[ORM\Column(name: "element_rattache", length: 65535)]
+    private ?string $elementRattache = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="exercice", type="integer", nullable=false)
-     */
-    private $exercice;
+    #[Assert\NotNull()]
+    #[ORM\Column()]
+    private ?int $exercice = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="sens", type="text", length=65535, nullable=false)
-     */
-    private $sens;
+    #[Assert\NotNull()]
+    #[ORM\Column(length: 65535)]
+    private ?string $sens = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="annulation_rejet", type="text", length=65535, nullable=false)
-     */
-    private $annulationRejet;
+    #[Assert\NotNull()]
+    #[ORM\Column(name: "annulation_rejet", length: 65535)]
+    private ?string $annulationRejet = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="bordereau_piece", type="text", length=65535, nullable=false)
-     */
-    private $bordereauPiece;
+    #[Assert\NotNull()]
+    #[ORM\Column(name: "bordereau_piece", length: 65535)]
+    private ?string $bordereauPiece = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="objet", type="string", length=500, nullable=false)
-     */
+    #[Assert\NotNull()]
+    #[ORM\Column(length: 500)]
     private $objet;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="dossierpj", type="integer", nullable=true, options={"default"="NULL"})
-     */
-    private $dossierpj = NULL;
+    #[ORM\Column(name: "dossierpj")]
+    private ?int $dossierpj = null;
+
+    #[Assert\NotNull()]
+    #[ORM\Column(name : "fichierpj", length: 100)]
+    private ?string $fichierpj = null;
 
     public function getId(): ?int
     {
@@ -255,5 +215,27 @@ class Piece
         return $this;
     }
 
+    /**
+     * Get the value of fichierpj
+     *
+     * @return ?string
+     */
+    public function getFichierpj(): ?string
+    {
+        return $this->fichierpj;
+    }
 
+    /**
+     * Set the value of fichierpj
+     *
+     * @param ?string $fichierpj
+     *
+     * @return self
+     */
+    public function setFichierpj(?string $fichierpj): self
+    {
+        $this->fichierpj = $fichierpj;
+
+        return $this;
+    }
 }

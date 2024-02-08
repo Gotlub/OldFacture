@@ -59,7 +59,7 @@
         <option name="fixed"/>
       </options>
     </field>
-    <field name="dossierpj" type="boolean" column="dossierpj" nullable="true">
+    <field name="dossierpj" type="string" column="dossierpj" nullable="false">
       <options>
         <option name="default">NULL</option>
       </options>
