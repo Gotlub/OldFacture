@@ -41,7 +41,7 @@ class EngagementController extends AbstractController
         $libelle = $request->get("LibelleEntite");
         $libelle = ($libelle == "") ? "**" : $libelle;
         $sens = $request->get("SensEtNumero");
-        $sens = ($sens == "") ? "**" : $obj;
+        $sens = ($sens == "") ? "**" : $sens;
         $ident = $request->get("IdentifiantPes");
         $ident = ($ident == "") ? "**" : $ident;
 
@@ -78,10 +78,10 @@ class EngagementController extends AbstractController
             $params += array("objet" => $obj);
         }
         if($libelle != "**"){
-            $params += array("objet" => $libelle);
+            $params += array("libelle_entite" => $libelle);
         }
         if($sens != "**"){
-            $params += array("libelle_entite" => $sens);
+            $params += array("sens_et_numero" => $sens);
         }
         if(count($params) == 0) {
             return $this->redirectToRoute('app_engagement.index');
@@ -116,7 +116,7 @@ class EngagementController extends AbstractController
     public function downloadAction(EngagementRepository $engagementRepository, $id) : BinaryFileResponse
     {
         $facture = $engagementRepository->find($id);
-        return $this->file('C:/Users/nfrere/symfony/www/html/jvspj/public/'
+        return $this->file('/var/www/html/jvspj/public/'
          .   $facture->getDossierpj() . '/' . $facture->getFichierpj());
     }
 }

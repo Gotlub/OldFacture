@@ -48,12 +48,13 @@ class PieceRepository extends ServiceEntityRepository
         ;
     }
 
-    public function paginationQueryComplex(array $params) 
+    public function paginationQueryComplex(array $params, string $sens) 
     {
         $sql = "SELECT p.* from piece p where";
         foreach ($params as $key => $value){
             $sql .= " $key LIKE  '%$value%' and";
         }
+        if ($sens != ""){ $sql .= " sens = '$sens'   ";}
         $sql = substr($sql, 0, strlen($sql)-3);
         $sql .=" order by p.identifiant_PES";
         $rsm = new ResultSetMappingBuilder($this->getEntityManager());

@@ -96,7 +96,8 @@ class FactureController extends AbstractController
             'obj' => $obj,
             'ident' => $ident,
             'annee' => $annee,
-            'libelle' => $libelle
+            'libelle' => $libelle,
+            'numero' => $numero
         ]);
     }
 
@@ -112,7 +113,7 @@ class FactureController extends AbstractController
     public function downloadAction(FactureRepository $factureRepository, $id) : BinaryFileResponse
     {
         $facture = $factureRepository->find($id);
-        return $this->file('C:/Users/nfrere/symfony/www/html/jvspj/public/'
+        return $this->file('/var/www/html/jvspj/public/'
          .   $facture->getDossierpj() . '/' . $facture->getFichierpj());
     }
 

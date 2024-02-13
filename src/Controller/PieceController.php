@@ -69,6 +69,7 @@ class PieceController extends AbstractController
     $descrip ="", $annee = "", $code = "", $obj= "", $libelle = "",
     $ident = "", $bordereau= "", $sens = "", $annul = ""): Response{
         $params = array();
+        $leSens = "";
         if($annee != "**" && is_numeric($annee)){
             $params += array("exercice" => (int)$annee);
         }
@@ -91,16 +92,16 @@ class PieceController extends AbstractController
             $params += array("bordereau_piece" => $bordereau);
         }
         if($sens != "**"){
-            $params += array("sens" => $sens);
+            $leSens = $sens;
         }
         if($annul != "**"){
             $params += array("annulation_rejet" => $annul);
         }
-        if(count($params) == 0) {
+        if(count($params) == 0 && $leSens == "") {
             return $this->redirectToRoute('app_piece.index');
         }
         $pagination = $paginator->paginate(
-            $pieceRepository->paginationQueryComplex($params)->getResult(),
+            $pieceRepository->paginationQueryComplex($params, $leSens)->getResult(),
             $request->query->get('page', 1),
             20
         );
@@ -130,7 +131,7 @@ class PieceController extends AbstractController
     public function downloadAction(PieceRepository $pieceRepository, $id) : BinaryFileResponse
     {
         $piece = $pieceRepository->find($id);
-        return $this->file('C:/Users/nfrere/symfony/www/html/jvspj/public/'
+        return $this->file('/var/www/html/jvspj/public/'
          .   $piece->getDossierpj() . '/' . $piece->getFichierpj());
     }
 
