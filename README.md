@@ -11,7 +11,7 @@ OldFacture est un petit logiciel de gestion a destination de la comtabilitée du
 
 ## Installation
 
-SoniaProject nécessite [php>=8.0](https://www.php.net/releases/8.2/fr.php)
+OldFacture nécessite [php>=8.0](https://www.php.net/releases/8.2/fr.php)
             
 
 Installer le project avec composer.
